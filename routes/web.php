@@ -6,10 +6,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeviceController;
 
 // Main dashboard route
-Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
+Route::get('/', [PageController::class, 'dashboard'])->name('dashboard');
 
 // User management routes
-Route::prefix('dashboard/users')->group(function () {
+Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/', [UserController::class, 'store'])->name('users.store');
@@ -19,7 +19,7 @@ Route::prefix('dashboard/users')->group(function () {
 });
 
 // Device management routes
-Route::prefix('dashboard/devices')->group(function () {
+Route::prefix('devices')->group(function () {
     Route::get('/', [DeviceController::class, 'index'])->name('devices.index');
     Route::get('/create', [DeviceController::class, 'create'])->name('devices.create');
     Route::post('/', [DeviceController::class, 'store'])->name('devices.store');

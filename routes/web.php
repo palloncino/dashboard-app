@@ -2,13 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\UserController; // Ensure this line is present
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DeviceController;
 
-Route::get('/', [PageController::class, 'dashboard'])->name('dashboard');
-
+// Main dashboard route
 Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
-Route::get('/dashboard/users', [PageController::class, 'users'])->name('users');
-Route::get('/dashboard/devices', [PageController::class, 'devices'])->name('devices');
 
-Route::get('/users', [UserController::class, 'index']);
+// User management routes
+Route::prefix('dashboard/users')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('users.index');
+    Route::get('/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/', [UserController::class, 'store'])->name('users.store');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+});
 
+// Device management routes
+Route::prefix('dashboard/devices')->group(function () {
+    Route::get('/', [DeviceController::class, 'index'])->name('devices.index');
+    Route::get('/create', [DeviceController::class, 'create'])->name('devices.create');
+    Route::post('/', [DeviceController::class, 'store'])->name('devices.store');
+    Route::get('/{id}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
+    Route::put('/{id}', [DeviceController::class, 'update'])->name('devices.update');
+    Route::delete('/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+});

@@ -1,29 +1,39 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ClientDashboardController;
+use Illuminate\Support\Facades\Route;
 
-// Main dashboard route
-Route::get('/', [PageController::class, 'dashboard'])->name('dashboard');
-
-// User management routes
-Route::prefix('users')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('users.index');
-    Route::get('/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/', [UserController::class, 'store'])->name('users.store');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/', function () {
+    return view('welcome');
 });
 
-// Device management routes
-Route::prefix('devices')->group(function () {
-    Route::get('/', [DeviceController::class, 'index'])->name('devices.index');
-    Route::get('/create', [DeviceController::class, 'create'])->name('devices.create');
-    Route::post('/', [DeviceController::class, 'store'])->name('devices.store');
-    Route::get('/{id}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
-    Route::put('/{id}', [DeviceController::class, 'update'])->name('devices.update');
-    Route::delete('/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Admin routes
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    // Add more admin routes here, e.g., managing users and devices
+    Route::resource('users', UserController::class);
+    Route::resource('devices', DeviceController::class);
 });
+
+// Client routes
+Route::middleware(['auth', 'client'])->group(function () {
+    Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
+    // Add more client routes here, e.g., managing their own devices
+    Route::resource('devices', DeviceController::class)->except(['create', 'store', 'destroy']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

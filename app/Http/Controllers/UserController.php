@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,20 +26,12 @@ class UserController extends Controller
             'lastName' => 'required',
             'email' => 'required|email|unique:users',
             'role' => 'required',
-            'password' => 'required|min:8',
+            'password' => 'required|min:6',
         ]);
 
-        User::create([
-            'username' => $request->username,
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
-            'companyName' => $request->companyName,
-            'email' => $request->email,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
+        User::create($request->all());
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index');
     }
 
     public function edit($id)
@@ -57,21 +48,12 @@ class UserController extends Controller
             'lastName' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'role' => 'required',
-            'password' => 'nullable|min:8',
         ]);
 
         $user = User::findOrFail($id);
-        $user->update([
-            'username' => $request->username,
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
-            'companyName' => $request->companyName,
-            'email' => $request->email,
-            'role' => $request->role,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
-        ]);
+        $user->update($request->all());
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index');
     }
 
     public function destroy($id)
@@ -79,6 +61,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index');
     }
 }

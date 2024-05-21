@@ -1,4 +1,3 @@
-<!-- resources/views/users/index.blade.php -->
 @extends('layout.app')
 
 @section('title', 'Users')

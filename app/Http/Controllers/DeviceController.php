@@ -20,8 +20,16 @@ class DeviceController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required',
+            'serial_number' => 'required|unique:devices',
+            'status' => 'required',
+        ]);
+
         Device::create($request->all());
-        return redirect()->route('devices.index');
+
+        return redirect()->route('devices.index')->with('success', 'Device created successfully.');
     }
 
     public function edit($id)
@@ -32,14 +40,24 @@ class DeviceController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required',
+            'serial_number' => 'required|unique:devices,serial_number,' . $id,
+            'status' => 'required',
+        ]);
+
         $device = Device::findOrFail($id);
         $device->update($request->all());
-        return redirect()->route('devices.index');
+
+        return redirect()->route('devices.index')->with('success', 'Device updated successfully.');
     }
 
     public function destroy($id)
     {
-        Device::destroy($id);
-        return redirect()->route('devices.index');
+        $device = Device::findOrFail($id);
+        $device->delete();
+
+        return redirect()->route('devices.index')->with('success', 'Device deleted successfully.');
     }
 }

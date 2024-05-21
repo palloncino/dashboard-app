@@ -1,7 +1,5 @@
 <?php
 
-// database/migrations/2024_05_20_194356_create_users_table.php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
+            $table->string('username');
             $table->string('firstName');
             $table->string('lastName');
             $table->string('companyName')->nullable();

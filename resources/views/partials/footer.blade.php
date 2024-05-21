@@ -1,3 +1,3 @@
 <footer>
-    <p>&copy; 2024 Your Company</p>
+    <p>&copy; {{ date('Y') }} Your Company. All rights reserved.</p>
 </footer>

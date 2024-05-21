@@ -1,12 +1,10 @@
 <?php
 
-// database/factories/UserFactory.php
-
 namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class UserFactory extends Factory
 {
@@ -21,7 +19,7 @@ class UserFactory extends Factory
             'companyName' => $this->faker->company,
             'email' => $this->faker->unique()->safeEmail,
             'role' => 'admin',
-            'password' => bcrypt('password'), // or Hash::make('password')
+            'password' => Hash::make('password'),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,8 +21,26 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        User::create($request->all());
-        return redirect()->route('users.index');
+        $request->validate([
+            'username' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email|unique:users',
+            'role' => 'required',
+            'password' => 'required|min:8',
+        ]);
+
+        User::create([
+            'username' => $request->username,
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'companyName' => $request->companyName,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
     public function edit($id)
@@ -32,14 +51,34 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'username' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required',
+            'password' => 'nullable|min:8',
+        ]);
+
         $user = User::findOrFail($id);
-        $user->update($request->all());
-        return redirect()->route('users.index');
+        $user->update([
+            'username' => $request->username,
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'companyName' => $request->companyName,
+            'email' => $request->email,
+            'role' => $request->role,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy($id)
     {
-        User::destroy($id);
-        return redirect()->route('users.index');
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

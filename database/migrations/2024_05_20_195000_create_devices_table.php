@@ -18,7 +18,6 @@ class CreateDevicesTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('serial_number')->unique();
-            $table->text('description')->nullable();
             $table->string('status');
             $table->timestamps();
         });

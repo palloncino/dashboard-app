@@ -1,20 +1,19 @@
+<!-- resources/views/devices/index.blade.php -->
 @extends('layout.app')
 
 @section('title', 'Devices')
 
 @section('content')
-    <h1>Devices List</h1>
-    <table>
+    <h1>Devices</h1>
+    <a href="{{ route('devices.create') }}" class="btn btn-primary">Add Device</a>
+    <table class="table table-striped mt-3">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Type</th>
-                <th>Serial Number</th>
-                <th>Description</th>
                 <th>Status</th>
-                <th>Created At</th>
-                <th>Updated At</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -23,11 +22,15 @@
                     <td>{{ $device->id }}</td>
                     <td>{{ $device->name }}</td>
                     <td>{{ $device->type }}</td>
-                    <td>{{ $device->serial_number }}</td>
-                    <td>{{ $device->description }}</td>
                     <td>{{ $device->status }}</td>
-                    <td>{{ $device->created_at }}</td>
-                    <td>{{ $device->updated_at }}</td>
+                    <td>
+                        <a href="{{ route('devices.edit', $device->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('devices.destroy', $device->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

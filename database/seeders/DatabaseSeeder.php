@@ -4,27 +4,36 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Create 10 dummy users
-        User::factory(10)->create();
-
-        // Create a specific admin user
-        User::factory()->create([
+        // Create specific test users
+        User::create([
+            'username' => 'admin',
+            'firstName' => 'Admin',
+            'lastName' => 'User',
+            'companyName' => 'Admin Company',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin'
+            'role' => 'admin',
+            'password' => bcrypt('password'), // Ensure password is hashed correctly
+            'remember_token' => Str::random(10),
         ]);
 
-        // Create a specific client user
-        User::factory()->create([
+        User::create([
+            'username' => 'client',
+            'firstName' => 'Client',
+            'lastName' => 'User',
+            'companyName' => 'Client Company',
             'email' => 'client@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'client'
+            'role' => 'client',
+            'password' => bcrypt('password'), // Ensure password is hashed correctly
+            'remember_token' => Str::random(10),
         ]);
+
+        // Generate additional fake users
+        User::factory(10)->create();
     }
 }

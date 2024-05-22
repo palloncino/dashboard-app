@@ -1,36 +1,27 @@
-@extends('layout.app')
-
-@section('title', 'Users')
+@extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
+<div class="container">
     <h1>Users</h1>
-    <table class="table table-striped">
+    <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
+    <table class="table mt-3">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Username</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Company</th>
+                <th>Name</th>
                 <th>Email</th>
-                <th>Role</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($users as $user)
+            @foreach (\$users as \$user)
                 <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->username }}</td>
-                    <td>{{ $user->firstName }}</td>
-                    <td>{{ $user->lastName }}</td>
-                    <td>{{ $user->companyName }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role }}</td>
+                    <td>{{ \$user->id }}</td>
+                    <td>{{ \$user->name }}</td>
+                    <td>{{ \$user->email }}</td>
                     <td>
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
+                        <a href="{{ route('users.edit', \$user->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('users.destroy', \$user->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>

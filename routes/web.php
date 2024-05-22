@@ -18,7 +18,6 @@ Route::get('/dashboard', function () {
 // Admin routes
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    // Add more admin routes here, e.g., managing users and devices
     Route::resource('users', UserController::class);
     Route::resource('devices', DeviceController::class);
 });
@@ -26,7 +25,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // Client routes
 Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
-    // Add more client routes here, e.g., managing their own devices
     Route::resource('devices', DeviceController::class)->except(['create', 'store', 'destroy']);
 });
 
@@ -36,4 +34,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

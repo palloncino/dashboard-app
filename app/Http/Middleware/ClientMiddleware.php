@@ -10,10 +10,10 @@ class ClientMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'client') {
+        if (Auth::check() && Auth::user()->role == 'client') {
             return $next($request);
         }
 
-        return redirect('/'); // Redirect to home if not client
+        return redirect('/');
     }
 }
